@@ -1,18 +1,19 @@
-import fetch from "node-fetch";
+export default function handler(req, res) {
+  const surajInfo = {
+    name: "Suraj Jangid",
+    age: 14,
+    caste: "Jangid Shaab",
+    birthdate: "April 15",
+    channel: "@Suraj_Official_1",
+    interests: ["bots", "Python", "YouTube animations"],
+    school classes: "8:00 to 2:30",
+    location: "India",
+    apiPlan: "Vercel Free",
+    preferences: {
+      prefersNickname: "Neheni",
+      comfortablePlace: true
+    }
+  };
 
-export default async function handler(req, res) {
-  const { token } = req.query;
-
-  if (!token) {
-    return res.status(400).json({ ok: false, description: "Please provide bot token as ?token=YOUR_BOT_TOKEN" });
-  }
-
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/getMe`);
-    const data = await response.json();
-
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ ok: false, description: error.message });
-  }
+  res.status(200).json({ ok: true, result: surajInfo });
 }
