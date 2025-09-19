@@ -1,19 +1,22 @@
-export default function handler(req, res) {
-  const surajInfo = {
-    name: "Suraj Jangid",
-    age: 14,
-    caste: "Jangid Shaab",
-    birthdate: "April 15",
-    channel: "@Suraj_Official_1",
-    interests: ["bots", "Python", "YouTube animations"],
-    "school classes": "8:00 to 2:30",
-    location: "India",
-    apiPlan: "Vercel Free",
-    preferences: {
-      prefersNickname: "Neheni",
-      comfortablePlace: true
-    }
-  };
+import fetch from "node-fetch";
 
-  res.status(200).json(surajInfo);
-}  
+export default async function handler(req, res) {
+  try {
+    // Dusre website ya API ka URL
+    const url = "https://api.coindesk.com/v1/bpi/currentprice.json"; // example: Bitcoin price
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Apni API se return kar do
+    res.status(200).json({
+      ok: true,
+      source: url,
+      data: data
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: error.message
+    });
+  }
+}
