@@ -2,15 +2,8 @@
 const util = require("minecraft-server-util");
 
 module.exports = async (req, res) => {
-  const host = process.env.MC_HOST;
+  const host = "overkillsmp-762dac.in.bedrock.shulkerboxes.com";
   const port = Number(process.env.MC_PORT || 25565);
-
-  if (!host) {
-    return res.status(500).json({
-      success: false,
-      error: "Minecraft server not configured"
-    });
-  }
 
   try {
     const result = await util.status(host, port, {
@@ -40,8 +33,7 @@ module.exports = async (req, res) => {
         max: 0
       },
       version: null,
-      ping: null,
-      updatedAt: new Date().toISOString()
+      ping: null
     });
   }
 };
