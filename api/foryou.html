@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Security</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #000;
+  color: #00ff41;
+  font-family: monospace;
+  overflow: hidden;
+}
+canvas {
+  position: fixed;
+  inset: 0;
+  opacity: .35;
+}
+.main {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+h1 {
+  font-size: 27px;
+  text-shadow: 0 0 15px #00ff41;
+}
+#terminal {
+  width: 100%;
+  max-width: 500px;
+  height: 220px;
+  overflow: hidden;
+  border: 1px solid #00ff41;
+  padding: 12px;
+  text-align: left;
+  box-shadow: 0 0 15px #00ff4144;
+  font-size: 13px;
+}
+button {
+  background: #00ff41;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  margin: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
+}
+#result {
+  display: none;
+  color: #fff;
+}
+.red {
+  color: #ff3333;
+  text-shadow: 0 0 12px red;
+}
+#bar {
+  width: 100%;
+  max-width: 400px;
+  height: 8px;
+  background: #222;
+  margin: 15px;
+}
+#progress {
+  width: 0%;
+  height: 100%;
+  background: #00ff41;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="main">
+
+<div id="start">
+<h1>⚠ SYSTEM SECURITY</h1>
+<p>Unknown device detected.</p>
+<p>Security scan is ready.</p>
+<button onclick="startHack()">START SCAN</button>
+</div>
+
+<div id="scan" style="display:none">
+<h1 class="red">⚠ DEVICE SCANNING</h1>
+<div id="terminal"></div>
+<div id="bar"><div id="progress"></div></div>
+<p id="percent">0%</p>
+<button onclick="stopPrank()">STOP</button>
+</div>
+
+<div id="result">
+<h1 class="red">SYSTEM ALERT!</h1>
+<h2>ALISON NOOBDA HAI 😂</h2>
+<h1 style="color:#00ff41">JUST A PRANK!</h1>
+<p>Your phone is completely fine.</p>
+<button onclick="location.reload()">REPLAY</button>
+</div>
+
+</div>
+
+<script>
+// MATRIX BACKGROUND
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+let width, height;
+let drops;
+
+function resize() {
+  width = canvas.width = innerWidth;
+  height = canvas.height = innerHeight;
+  drops = Array(Math.floor(width / 16)).fill(1);
+}
+resize();
+window.addEventListener("resize", resize);
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,width,height);
+  ctx.fillStyle = "#00ff41";
+  ctx.font = "15px monospace";
+
+  drops.forEach((y,i) => {
+    const char = String.fromCharCode(
+      0x30A0 + Math.random() * 96
+    );
+    ctx.fillText(char,i*16,y*16);
+    if(y*16 > height && Math.random() > 0.975)
+      drops[i] = 0;
+    drops[i]++;
+  });
+}
+let matrixTimer = setInterval(drawMatrix,50);
+
+// PRANK
+let timer;
+let stopped = false;
+
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const voice = new SpeechSynthesisUtterance(text);
+  voice.lang = "en-IN";
+  voice.rate = 0.9;
+  voice.pitch = 0.7;
+  speechSynthesis.speak(voice);
+}
+
+const terminal = document.getElementById("terminal");
+
+const messages = [
+  "Initializing security scan...",
+  "Connecting to fake terminal...",
+  "Checking device status...",
+  "Scanning system files...",
+  "Analyzing security...",
+  "WARNING: Suspicious activity detected!",
+  "Loading prank protocol...",
+  "Almost complete..."
+];
+
+function startHack() {
+  stopped = false;
+  document.getElementById("start").style.display="none";
+  document.getElementById("scan").style.display="block";
+
+  speak("Alison noobda hai. Welcome to the prank.");
+
+  let count = 0;
+  let progress = 0;
+
+  timer = setInterval(() => {
+    if(stopped) return;
+
+    if(count < messages.length) {
+      terminal.innerHTML +=
+        "<p>> " + messages[count] + "</p>";
+      terminal.scrollTop = terminal.scrollHeight;
+      count++;
+    }
+
+    progress = Math.min(100, progress + 9);
+    document.getElementById("progress").style.width =
+      progress + "%";
+    document.getElementById("percent").innerText =
+      progress + "%";
+
+    if(progress >= 100) {
+      clearInterval(timer);
+      setTimeout(showResult, 500);
+    }
+  }, 1100);
+}
+
+function showResult() {
+  if(stopped) return;
+
+  document.getElementById("scan").style.display="none";
+  document.getElementById("result").style.display="block";
+
+  speak("Alison noobda hai. Just a prank. Your phone is completely fine.");
+}
+
+function stopPrank() {
+  stopped = true;
+  clearInterval(timer);
+  speechSynthesis.cancel();
+  document.getElementById("scan").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("result").innerHTML =
+    "<h1>PRANK STOPPED</h1><h2>Your phone is safe 😂</h2>";
+}
+</script>
+
+</body>
+</html>
