@@ -1,0 +1,17 @@
+async function askGemini(message) {
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) throw new Error(data.error || "API failed");
+
+  return data.candidates[0].content.parts
+    .map(part => part.text || "")
+    .join("");
+}
