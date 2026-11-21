@@ -3,50 +3,175 @@ module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({
+      success: false,
+      error: "POST method required"
+    });
   }
 
-  const { password } = req.body || {};
+  const {
+    botToken,
+    guildId,
+    channelId,
+    message,
+    title,
+    description,
+    color,
+    footer,
+    image,
+    thumbnail
+  } = req.body || {};
 
-  if (!process.env.ADMIN_PASSWORD ||
-      password !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: "Invalid password" });
+  // Required fields
+  if (!botToken || !guildId || !channelId) {
+    return res.status(400).json({
+      success: false,
+      error: "Bot token, guild ID and channel ID required"
+    });
   }
 
-  const token = process.env.DISCORD_BOT_TOKEN;
-  const guild = process.env.DISCORD_GUILD_ID;
-
-  if (!token || !guild) {
-    return res.status(500).json({ error: "Discord config missing" });
+  if (!/^\d{17,20}$/.test(guildId) ||
+      !/^\d{17,20}$/.test(channelId)) {
+    return res.status(400).json({
+      success: false,
+      error: "Invalid Discord IDs"
+    });
   }
+
+  if (typeof botToken !== "string" ||
+      botToken.length > 200 ||
+      !botToken.trim()) {
+    return res.status(400).json({
+      success: false,
+      error: "Invalid bot token"
+    });
+  }
+
+  const clean = (v, max) =>
+    typeof v === "string" ? v.trim().slice(0, max) : "";
+
+  const embedTitle = clean(title, 256);
+  const embedDescription = clean(description || message, 4096);
+  const embedFooter = clean(footer, 2048);
+
+  if (!embedTitle && !embedDescription) {
+    return res.status(400).json({
+      success: false,
+      error: "Title or description required"
+    });
+  }
+
+  const validUrl = value => {
+    if (!value) return undefined;
+    try {
+      const url = new URL(value);
+      return url.protocol === "https:" ? url.href : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const imageUrl = validUrl(image);
+  const thumbUrl = validUrl(thumbnail);
+
+  if ((image && !imageUrl) || (thumbnail && !thumbUrl)) {
+    return res.status(400).json({
+      success: false,
+      error: "Images must use valid HTTPS URLs"
+    });
+  }
+
+  const embedColor = /^#[0-9a-fA-F]{6}$/.test(color || "")
+    ? parseInt(color.slice(1), 16)
+    : 0x35BDF2;
 
   try {
-    const response = await fetch(
-      `https://discord.com/api/v10/guilds/${guild}/channels`,
-      {
-        headers: { Authorization: `Bot ${token}` }
-      }
+    const headers = {
+      Authorization: `Bot ${botToken}`,
+      "Content-Type": "application/json"
+    };
+
+    // Verify bot can access the specified guild
+    const guildResponse = await fetch(
+      `https://discord.com/api/v10/guilds/${guildId}`,
+      { headers }
     );
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: "Unable to load Discord channels"
+    if (!guildResponse.ok) {
+      return res.status(403).json({
+        success: false,
+        error: "Bot cannot access this server"
       });
     }
 
-    const data = await response.json();
+    // Verify channel belongs to specified guild
+    const channelResponse = await fetch(
+      `https://discord.com/api/v10/channels/${channelId}`,
+      { headers }
+    );
 
-    const channels = data
-      .filter(c => c.type === 0 || c.type === 5)
-      .map(c => ({
-        id: c.id,
-        name: c.name,
-        type: c.type
-      }));
+    if (!channelResponse.ok) {
+      return res.status(400).json({
+        success: false,
+        error: "Channel not found or inaccessible"
+      });
+    }
 
-    return res.status(200).json({ channels });
+    const channelData = await channelResponse.json();
 
-  } catch {
-    return res.status(500).json({ error: "Server error" });
+    if (channelData.guild_id !== guildId ||
+        ![0, 5].includes(channelData.type)) {
+      return res.status(403).json({
+        success: false,
+        error: "Invalid channel for this server"
+      });
+    }
+
+    const embed = {
+      ...(embedTitle && { title: embedTitle }),
+      ...(embedDescription && { description: embedDescription }),
+      color: embedColor,
+      ...(embedFooter && { footer: { text: embedFooter } }),
+      ...(imageUrl && { image: { url: imageUrl } }),
+      ...(thumbUrl && { thumbnail: { url: thumbUrl } })
+    };
+
+    // Send announcement
+    const sendResponse = await fetch(
+      `https://discord.com/api/v10/channels/${channelId}/messages`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          embeds: [embed],
+          allowed_mentions: { parse: [] }
+        })
+      }
+    );
+
+    const result = await sendResponse.json();
+
+    if (!sendResponse.ok) {
+      return res.status(sendResponse.status).json({
+        success: false,
+        error: result.message || "Discord send failed"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Announcement sent!",
+      messageId: result.id,
+      guildId,
+      channelId
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      error: "Internal server error"
+    });
   }
 };
