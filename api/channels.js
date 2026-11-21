@@ -1,6 +1,15 @@
 
 module.exports = async (req, res) => {
+  // CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Cache-Control", "no-store");
+
+  // Browser preflight
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
 
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -10,19 +19,11 @@ module.exports = async (req, res) => {
   }
 
   const {
-    botToken,
-    guildId,
-    channelId,
-    message,
-    title,
-    description,
-    color,
-    footer,
-    image,
-    thumbnail
+    botToken, guildId, channelId,
+    message, title, description,
+    color, footer, image, thumbnail
   } = req.body || {};
 
-  // Required fields
   if (!botToken || !guildId || !channelId) {
     return res.status(400).json({
       success: false,
@@ -39,8 +40,7 @@ module.exports = async (req, res) => {
   }
 
   if (typeof botToken !== "string" ||
-      botToken.length > 200 ||
-      !botToken.trim()) {
+      botToken.length > 200 || !botToken.trim()) {
     return res.status(400).json({
       success: false,
       error: "Invalid bot token"
@@ -91,29 +91,37 @@ module.exports = async (req, res) => {
       "Content-Type": "application/json"
     };
 
-    // Verify bot can access the specified guild
+    // Verify guild
     const guildResponse = await fetch(
       `https://discord.com/api/v10/guilds/${guildId}`,
       { headers }
     );
 
     if (!guildResponse.ok) {
+      const detail = await guildResponse.text();
       return res.status(403).json({
         success: false,
-        error: "Bot cannot access this server"
+        stage: "GUILD_CHECK",
+        error: "Bot cannot access this server",
+        discordStatus: guildResponse.status,
+        details: detail.slice(0, 1500)
       });
     }
 
-    // Verify channel belongs to specified guild
+    // Verify channel
     const channelResponse = await fetch(
       `https://discord.com/api/v10/channels/${channelId}`,
       { headers }
     );
 
     if (!channelResponse.ok) {
+      const detail = await channelResponse.text();
       return res.status(400).json({
         success: false,
-        error: "Channel not found or inaccessible"
+        stage: "CHANNEL_CHECK",
+        error: "Channel not found or inaccessible",
+        discordStatus: channelResponse.status,
+        details: detail.slice(0, 1500)
       });
     }
 
@@ -123,6 +131,7 @@ module.exports = async (req, res) => {
         ![0, 5].includes(channelData.type)) {
       return res.status(403).json({
         success: false,
+        stage: "CHANNEL_VALIDATION",
         error: "Invalid channel for this server"
       });
     }
@@ -136,7 +145,7 @@ module.exports = async (req, res) => {
       ...(thumbUrl && { thumbnail: { url: thumbUrl } })
     };
 
-    // Send announcement
+    // Send Discord message
     const sendResponse = await fetch(
       `https://discord.com/api/v10/channels/${channelId}/messages`,
       {
@@ -154,12 +163,16 @@ module.exports = async (req, res) => {
     if (!sendResponse.ok) {
       return res.status(sendResponse.status).json({
         success: false,
-        error: result.message || "Discord send failed"
+        stage: "DISCORD_SEND",
+        error: result.message || "Discord send failed",
+        discordStatus: sendResponse.status,
+        details: result
       });
     }
 
     return res.status(200).json({
       success: true,
+      stage: "COMPLETE",
       message: "Announcement sent!",
       messageId: result.id,
       guildId,
@@ -167,11 +180,12 @@ module.exports = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("ZORVAXO API ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      error: "Internal server error"
+      stage: "SERVER_ERROR",
+      error: error.message || "Internal server error"
     });
   }
 };
