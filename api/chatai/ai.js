@@ -1,13 +1,18 @@
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
   }
 
   try {
-    const key = process.env.GEMINI_API_KEY;
-    if (!key) {
-      return res.status(500).json({ error: "API key not configured" });
+    const query = req.query.query;
+
+    if (!query) {
+      return res.status(400).json({
+        error: "Query required"
+      });
     }
 
     const response = await fetch(
@@ -16,19 +21,32 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": key
+          "x-goog-api-key": process.env.GEMINI_API_KEY
         },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: req.body.message || "Hello" }]
+            parts: [{ text: query }]
           }]
         })
       }
     );
 
     const data = await response.json();
-    return res.status(response.status).json(data);
-  } catch {
-    return res.status(500).json({ error: "Server error" });
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: data.error?.message || "AI request failed"
+      });
+    }
+
+    return res.status(200).json({
+      Message:
+        data.candidates?.[0]?.content?.parts?.[0]?.text || ""
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error"
+    });
   }
 }
