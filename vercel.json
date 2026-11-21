@@ -1,4 +1,11 @@
 
 {
-  "version": 2
+  "functions": {
+    "api/send.js": {
+      "maxDuration": 30
+    },
+    "api/channels.js": {
+      "maxDuration": 15
+    }
+  }
 }
