@@ -4,275 +4,250 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OverMC | Announcement Manager</title>
+<title>Zorvaxo | Discord Embed Sender</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090e15;color:#eaf2fa;font-family:Arial,sans-serif}
-header{padding:20px 5%;border-bottom:1px solid #263544;
-display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:23px;font-weight:900;letter-spacing:2px;color:#54caff}
-.small{color:#8495a5;font-size:12px}
-main{max-width:1150px;margin:35px auto;padding:0 18px}
-h2{font-size:19px}
-.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
-.card{background:#111a25;border:1px solid #263747;border-radius:12px;padding:20px}
-label{display:block;font-size:12px;color:#9eafbf;margin:17px 0 7px}
-input,textarea,select{
-width:100%;padding:12px;background:#080f18;
-color:white;border:1px solid #34475a;border-radius:7px;
-outline:none;font:inherit;font-size:13px
+body{
+ margin:0;background:#090e16;color:#edf3fa;
+ font-family:Arial,sans-serif;padding:20px
 }
-textarea{resize:vertical;min-height:120px}
-input:focus,textarea:focus,select:focus{border-color:#48c9ff}
-button{border:0;border-radius:7px;padding:12px 16px;
-background:#168ec5;color:white;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
+header{
+ max-width:1100px;margin:10px auto 25px;
+ display:flex;justify-content:space-between;align-items:center
+}
+.logo{font-size:25px;font-weight:900;letter-spacing:2px;color:#57caff}
+.sub{font-size:11px;color:#8395a8;margin-top:5px}
+main{max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{
+ background:#111b27;border:1px solid #293c50;
+ border-radius:12px;padding:20px
+}
+h2{font-size:17px;margin:0 0 17px}
+label{
+ display:block;color:#a4b5c6;font-size:11px;
+ font-weight:bold;margin:15px 0 7px
+}
+input,textarea{
+ width:100%;background:#080f18;color:white;
+ border:1px solid #34485c;border-radius:7px;
+ padding:12px;outline:none;font-size:13px
+}
+input:focus,textarea:focus{border-color:#42bfff}
+textarea{height:110px;resize:vertical}
 .row{display:flex;gap:10px}
-.row>*{flex:1;min-width:0}
-.send{width:100%;margin-top:20px;background:#5865f2}
-.secondary{background:#263747}
-.preview{background:#313338;padding:17px;border-radius:9px}
-.embed{background:#2b2d31;border-left:4px solid #35bdf2;
-padding:15px;border-radius:4px;min-height:120px;overflow-wrap:anywhere}
+.row>div{flex:1;min-width:0}
+button{
+ border:0;border-radius:7px;padding:13px;
+ background:#5865f2;color:white;font-weight:bold;
+ cursor:pointer
+}
+button:disabled{opacity:.5}
+.send{width:100%;margin-top:20px}
+.preview{
+ background:#313338;padding:17px;border-radius:8px
+}
+.embed{
+ background:#2b2d31;border-left:4px solid #35bdf2;
+ padding:15px;border-radius:4px;min-height:130px;
+ overflow-wrap:anywhere
+}
 .embed h3{font-size:16px;margin:0 0 10px}
 .embed p{font-size:14px;white-space:pre-wrap;line-height:1.5;margin:0}
 .embed img{max-width:100%;border-radius:5px;margin-top:12px}
 .thumb{width:75px;float:right;margin-left:12px}
-.foot{font-size:11px;color:#aeb4bd;margin-top:16px}
-#result{font-size:13px;margin-top:14px;line-height:1.6}
-.top{display:flex;justify-content:space-between;align-items:center}
-.hidden{display:none}
-@media(max-width:750px){.layout{grid-template-columns:1fr}header{padding:17px}}
+.footer{color:#aeb4bd;font-size:11px;margin-top:15px}
+#result{
+ margin-top:15px;padding:12px;background:#080f18;
+ border-radius:7px;font-size:12px;white-space:pre-wrap;
+ overflow-wrap:anywhere;display:none
+}
+.api{color:#63caff;font-size:11px;overflow-wrap:anywhere}
+.small{color:#8495a8;font-size:11px}
+@media(max-width:750px){.grid{grid-template-columns:1fr}body{padding:12px}}
 </style>
 </head>
 <body>
 
 <header>
  <div>
-  <div class="logo">OVERMC</div>
-  <div class="small">ANNOUNCEMENT CONTROL CENTER</div>
+  <div class="logo">ZORVAXO</div>
+  <div class="sub">UNIVERSAL DISCORD EMBED SENDER</div>
  </div>
- <div class="small">● ADMIN PANEL</div>
+ <div class="small">● API SYSTEM</div>
 </header>
 
 <main>
-<section id="login" class="card" style="max-width:420px;margin:60px auto">
- <h2>Administrator Login</h2>
- <p class="small">Enter your private dashboard password.</p>
- <label>ADMIN PASSWORD</label>
- <input id="pass" type="password" placeholder="Enter password">
- <button style="width:100%;margin-top:17px" onclick="login()">LOGIN →</button>
- <div id="loginError" class="small"></div>
+<div class="grid">
+
+<section class="card">
+<h2>⚙ Bot Configuration</h2>
+
+<label>DISCORD BOT TOKEN</label>
+<input id="token" type="password" placeholder="Enter your bot token">
+
+<label>GUILD / SERVER ID</label>
+<input id="guild" placeholder="Discord Server ID">
+
+<label>CHANNEL ID</label>
+<input id="channel" placeholder="Discord Channel ID">
+
+<h2 style="margin-top:28px">✉ Embed Composer</h2>
+
+<label>EMBED TITLE</label>
+<input id="title" maxlength="256" placeholder="Announcement Title">
+
+<label>DESCRIPTION</label>
+<textarea id="description" maxlength="4096"
+placeholder="Write your announcement..."></textarea>
+
+<div class="row">
+<div>
+<label>EMBED COLOR</label>
+<input type="color" id="color" value="#35bdf2">
+</div>
+<div>
+<label>FOOTER</label>
+<input id="footer" maxlength="2048" placeholder="Zorvaxo Network">
+</div>
+</div>
+
+<label>THUMBNAIL URL</label>
+<input id="thumbnail" placeholder="https://example.com/logo.png">
+
+<label>IMAGE URL</label>
+<input id="image" placeholder="https://example.com/banner.png">
+
+<button class="send" id="send" onclick="sendEmbed()">
+ SEND DISCORD EMBED →
+</button>
+
+<div id="result"></div>
 </section>
 
-<section id="dashboard" class="hidden">
- <div class="top">
-  <div>
-   <h2>Announcement Composer</h2>
-   <p class="small">Create and publish Discord embeds.</p>
-  </div>
-  <button class="secondary" onclick="logout()">LOGOUT</button>
- </div>
+<section class="card">
+<h2>◈ Live Discord Preview</h2>
+<div class="preview">
+<div style="font-size:12px;margin-bottom:12px">
+ <b>YOUR BOT</b> <span style="color:#aaa">APP</span>
+</div>
+<div class="embed" id="embed">
+<img id="pThumb" class="thumb" hidden>
+<h3 id="pTitle">Announcement Title</h3>
+<p id="pDesc">Your announcement will appear here.</p>
+<img id="pImage" hidden>
+<div class="footer" id="pFooter">Zorvaxo Network</div>
+</div>
+</div>
 
- <div class="layout">
-  <section class="card">
-   <h2>Compose Embed</h2>
+<h2 style="margin-top:30px">API Information</h2>
+<p class="small">REQUEST METHOD</p>
+<b style="font-size:13px">POST</b>
+<p class="small">ENDPOINT</p>
+<div class="api">https://zorvaxo.api.vercel.app/api/channels</div>
 
-   <label>DESTINATION CHANNEL</label>
-   <div class="row">
-    <select id="channel"><option value="">Loading channels...</option></select>
-    <button class="secondary" onclick="loadChannels()">↻</button>
-   </div>
-
-   <label>EMBED TITLE</label>
-   <input id="title" maxlength="256" placeholder="OverMC Announcement">
-
-   <label>DESCRIPTION</label>
-   <textarea id="description" maxlength="4096"
-   placeholder="Write your announcement here..."></textarea>
-
-   <div class="row">
-    <div>
-     <label>EMBED COLOR</label>
-     <input id="color" type="color" value="#35bdf2">
-    </div>
-    <div>
-     <label>FOOTER</label>
-     <input id="footer" maxlength="2048" placeholder="OverMC Network">
-    </div>
-   </div>
-
-   <label>THUMBNAIL URL (OPTIONAL)</label>
-   <input id="thumbnail" type="url" placeholder="https://example.com/logo.png">
-
-   <label>IMAGE URL (OPTIONAL)</label>
-   <input id="image" type="url" placeholder="https://example.com/banner.png">
-
-   <button class="send" id="send" onclick="sendMessage()">
-    SEND ANNOUNCEMENT →
-   </button>
-   <div id="result"></div>
-  </section>
-
-  <section class="card">
-   <h2>Live Preview</h2>
-   <p class="small">Discord-style embed preview</p>
-
-   <div class="preview">
-    <div class="small" style="margin-bottom:12px">
-     <b style="color:white">OVERMC BOT</b> <span>APP</span>
-    </div>
-    <div class="embed" id="embedPreview">
-     <img id="previewThumb" class="thumb hidden">
-     <h3 id="previewTitle">Announcement Title</h3>
-     <p id="previewDescription">Your announcement description will appear here.</p>
-     <img id="previewImage" class="hidden">
-     <div class="foot" id="previewFooter">OverMC Network</div>
-    </div>
-   </div>
-
-   <div style="margin-top:25px">
-    <h2>Dashboard Information</h2>
-    <p class="small">• Unlimited announcements</p>
-    <p class="small">• Selected channel delivery</p>
-    <p class="small">• Discord embed formatting</p>
-    <p class="small">• Secure backend authentication</p>
-    <p class="small">• No permanent message lock</p>
-   </div>
-  </section>
- </div>
+<h2 style="margin-top:28px">Instructions</h2>
+<p class="small">1. Enter your own Discord bot token.</p>
+<p class="small">2. Enter your server and channel IDs.</p>
+<p class="small">3. Design your embed.</p>
+<p class="small">4. Preview and send.</p>
+<p class="small">5. Check the API response below.</p>
 </section>
+
+</div>
 </main>
 
 <script>
-let password = "";
-
 const $ = id => document.getElementById(id);
 
-async function api(path,body){
- const response = await fetch(path,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify(body)
- });
- const data = await response.json();
- if(!response.ok) throw new Error(data.error || "Request failed");
- return data;
-}
-
-async function login(){
- const value = $("pass").value;
- $("loginError").textContent = "Checking...";
-
- try{
-  password = value;
-  await loadChannels();
-
-  $("login").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
- }catch(e){
-  password = "";
-  $("loginError").textContent = e.message;
- }
-}
-
-function logout(){
- password = "";
- $("pass").value = "";
- $("dashboard").classList.add("hidden");
- $("login").classList.remove("hidden");
-}
-
-async function loadChannels(){
- const data = await api("/api/channels",{password});
-
- $("channel").innerHTML = '<option value="">Select channel</option>';
-
- data.channels.forEach(c=>{
-  const option = document.createElement("option");
-  option.value = c.id;
-  option.textContent = "# " + c.name;
-  $("channel").appendChild(option);
- });
-}
-
 function updatePreview(){
- const title = $("title").value;
- const desc = $("description").value;
- const footer = $("footer").value;
- const image = $("image").value;
- const thumb = $("thumbnail").value;
+ $("pTitle").textContent = $("title").value || "Announcement Title";
+ $("pDesc").textContent = $("description").value || "Your announcement will appear here.";
+ $("pFooter").textContent = $("footer").value || "Zorvaxo Network";
+ $("embed").style.borderLeftColor = $("color").value;
 
- $("previewTitle").textContent = title || "Announcement Title";
- $("previewDescription").textContent =
-  desc || "Your announcement description will appear here.";
- $("previewFooter").textContent = footer || "OverMC Network";
-
- $("embedPreview").style.borderLeftColor = $("color").value;
-
- function setImage(id,url){
+ function imagePreview(id,url){
   const el = $(id);
-  el.classList.add("hidden");
+  el.hidden = true;
   el.removeAttribute("src");
-
   if(!url) return;
-
   try{
-   const parsed = new URL(url);
-   if(parsed.protocol !== "https:") return;
-   el.src = parsed.href;
-   el.classList.remove("hidden");
-   el.onerror = () => el.classList.add("hidden");
+   const u = new URL(url);
+   if(u.protocol !== "https:") return;
+   el.src = u.href;
+   el.hidden = false;
+   el.onerror = () => el.hidden = true;
   }catch{}
  }
-
- setImage("previewImage",image);
- setImage("previewThumb",thumb);
+ imagePreview("pImage",$("image").value);
+ imagePreview("pThumb",$("thumbnail").value);
 }
 
-["title","description","footer","image","thumbnail","color"]
+["title","description","footer","color","image","thumbnail"]
 .forEach(id=>$(id).addEventListener("input",updatePreview));
 
-async function sendMessage(){
- const channelId = $("channel").value;
+async function sendEmbed(){
+ const token = $("token").value.trim();
+ const guildId = $("guild").value.trim();
+ const channelId = $("channel").value.trim();
  const title = $("title").value.trim();
  const description = $("description").value.trim();
 
- if(!channelId){
-  $("result").textContent = "Select a channel first.";
+ const result = $("result");
+ const button = $("send");
+
+ if(!token || !guildId || !channelId){
+  alert("Enter bot token, server ID and channel ID.");
   return;
  }
 
  if(!title && !description){
-  $("result").textContent = "Add a title or description.";
+  alert("Enter a title or description.");
   return;
  }
 
- const button = $("send");
+ if(!confirm("Send this embed to your Discord channel?")) return;
+
  button.disabled = true;
  button.textContent = "SENDING...";
+ result.style.display = "block";
+ result.textContent = "Connecting to API...";
 
  try{
-  const data = await api("/api/send",{
-   password,
-   channelId,
-   embed:{
-    title,
-    description,
-    color:$("color").value,
-    footer:$("footer").value,
-    image:$("image").value,
-    thumbnail:$("thumbnail").value
+  const response = await fetch(
+   "https://zorvaxo.api.vercel.app/api/channels",
+   {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+     botToken:token,
+     guildId,
+     channelId,
+     title,
+     description,
+     color:$("color").value,
+     footer:$("footer").value,
+     thumbnail:$("thumbnail").value,
+     image:$("image").value
+    })
    }
-  });
+  );
 
-  $("result").textContent = "✓ Announcement sent successfully! ID: " + data.messageId;
+  const data = await response.json();
 
- }catch(e){
-  $("result").textContent = "✕ " + e.message;
+  if(!response.ok || !data.success){
+   throw new Error(data.error || "API request failed");
+  }
+
+  result.textContent =
+   "✓ EMBED SENT SUCCESSFULLY\n\nMessage ID: " + data.messageId +
+   "\nChannel ID: " + data.channelId;
+
+ }catch(error){
+  result.textContent = "✕ ERROR\n\n" + error.message;
  }finally{
   button.disabled = false;
-  button.textContent = "SEND ANNOUNCEMENT →";
+  button.textContent = "SEND DISCORD EMBED →";
  }
 }
 
