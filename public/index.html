@@ -3,398 +3,563 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zorvaxo • Discord Embed Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>Zorvaxo Studio</title>
+
 <style>
-:root{
-  --bg:#080b14;--panel:#101624;--panel2:#151e30;
-  --line:#26334a;--text:#edf3ff;--muted:#8998b2;
-  --blue:#648cff;--purple:#a276ff;--green:#35d49a;
-  --red:#ff647c;--yellow:#ffc66d;
+:root {
+  --bg:#101114;
+  --surface:#191b20;
+  --surface2:#22252c;
+  --border:#30333b;
+  --text:#f1f1f3;
+  --muted:#a2a5ae;
+  --accent:#a78bfa;
+  --accent2:#7c9cff;
+  --green:#58d6a0;
+  --red:#ff7185;
 }
 *{box-sizing:border-box}
 body{
- margin:0;background:radial-gradient(ellipse at 15% 0%,#172448 0,transparent 38%),var(--bg);
- color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;
- min-height:100vh
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Arial,sans-serif;
 }
 button,input,textarea{font:inherit}
 button{cursor:pointer}
-.app{max-width:1250px;margin:auto;padding:22px}
-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
-.brand{display:flex;align-items:center;gap:12px}
+.app{max-width:1150px;margin:auto;padding:20px}
+header{
+  height:65px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:11px}
 .logo{
- width:45px;height:45px;border-radius:14px;
- display:grid;place-items:center;font-size:23px;
- background:linear-gradient(135deg,var(--blue),var(--purple));
- box-shadow:0 8px 30px #648cff44
+  width:38px;height:38px;border-radius:13px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#8b7cff,#63a8ff);
+  font-weight:900;color:white;font-size:19px;
 }
-.brand h1{font-size:19px;margin:0}
-.brand p{font-size:11px;color:var(--muted);margin:4px 0 0}
-.status{font-size:12px;color:var(--green);background:#35d49a13;border:1px solid #35d49a33;padding:8px 12px;border-radius:30px}
-.hero{margin:25px 0}
-.hero h2{font-size:clamp(25px,5vw,38px);margin:0;letter-spacing:-1px}
-.hero h2 span{background:linear-gradient(90deg,#6e9bff,#bd8aff);color:transparent;background-clip:text}
-.hero p{color:var(--muted);font-size:13px;line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
-.stat,.panel{
- background:linear-gradient(145deg,#131c2d,#0e1522);
- border:1px solid var(--line);border-radius:17px
+.brand strong{font-size:17px;letter-spacing:.4px}
+.status{font-size:12px;color:var(--green)}
+.status:before{content:"●";margin-right:7px}
+nav{display:flex;gap:8px}
+.navbtn{
+  color:var(--muted);background:transparent;border:0;
+  padding:10px 13px;border-radius:10px;font-size:13px;
 }
-.stat{padding:15px}
-.stat small{color:var(--muted);font-size:11px}
-.stat strong{display:block;font-size:24px;margin-top:7px}
-.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-.panel{padding:19px;margin-bottom:16px}
-.panel h3{font-size:15px;margin:0 0 16px}
-.field{margin-bottom:14px}
-label{display:block;font-size:11px;color:#aab8d0;margin-bottom:7px}
+.navbtn.active,.navbtn:hover{background:var(--surface2);color:white}
+main{padding-top:35px}
+.hero{margin-bottom:28px}
+.hero h1{font-size:clamp(27px,5vw,39px);margin:0 0 10px}
+.gradient{
+  background:linear-gradient(90deg,#b69aff,#83a9ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:var(--muted);line-height:1.6;margin:0}
+.layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px;
+}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:19px;padding:20px;min-width:0;
+}
+.card h2{font-size:16px;margin:0 0 18px}
+.field{margin-bottom:15px}
+label{display:block;color:#c5c7ce;font-size:12px;margin-bottom:8px}
 input,textarea{
- width:100%;background:#090f1b;border:1px solid #293750;
- border-radius:10px;padding:12px;color:white;outline:none;font-size:13px
+  width:100%;background:#111318;border:1px solid var(--border);
+  border-radius:11px;padding:12px;color:white;outline:none;
+  transition:.2s;
 }
-input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #648cff19}
-textarea{resize:vertical;min-height:105px;line-height:1.5}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn{
- border:0;border-radius:10px;padding:12px 16px;font-weight:700;
- background:linear-gradient(100deg,#648cff,#986bff);color:white;
- transition:.2s
+input:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:115px;resize:vertical;line-height:1.5}
+input[type=color]{height:44px;padding:5px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.drop{
+  border:1.5px dashed #55516f;border-radius:15px;
+  background:#15151e;min-height:145px;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:18px;cursor:pointer;
+  transition:.2s;position:relative;overflow:hidden;
 }
-.btn:hover{filter:brightness(1.13);transform:translateY(-1px)}
-.btn:disabled{opacity:.5;cursor:wait;transform:none}
-.btn.secondary{background:#202c40;border:1px solid #35445f}
-.btn.danger{background:#3b1d2a;border:1px solid #743044;color:#ff9bad}
-.actions{display:flex;gap:9px;flex-wrap:wrap}
-.actions .btn{flex:1}
-.preview{
- background:#0b111e;border:1px solid #293750;border-left:4px solid #648cff;
- border-radius:9px;padding:14px;min-height:135px
+.drop:hover,.drop.drag{border-color:var(--accent);background:#242039}
+.drop input{display:none}
+.drop-content{pointer-events:none}
+.drop-icon{font-size:29px;margin-bottom:8px}
+.drop p{font-size:13px;margin:5px 0;color:#ddd}
+.drop small{font-size:11px;color:var(--muted)}
+.preview-image{max-width:100%;max-height:190px;border-radius:10px}
+.actions{display:flex;gap:10px;margin-top:18px}
+.primary{
+  background:linear-gradient(100deg,#9277f5,#739bff);
+  color:white;border:0;border-radius:12px;padding:13px 20px;
+  font-weight:700;flex:1;
 }
-.preview small{color:var(--muted);font-size:10px}
-.preview h4{margin:9px 0;font-size:16px}
-.preview p{font-size:13px;white-space:pre-wrap;line-height:1.5;color:#c1cce0}
-.preview img{max-width:100%;border-radius:8px;margin-top:10px}
-.diag-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.pill{font-size:10px;border-radius:20px;padding:5px 9px;background:#26334a;color:#b9c9e7}
-.errorbox{background:#271522;border:1px solid #713044;padding:13px;border-radius:12px;margin-top:13px}
-.errorbox.good{background:#10271f;border-color:#28634d}
-.errorbox strong{font-size:13px}
-.errorbox p{font-size:12px;color:#c5cede;line-height:1.6;margin-bottom:0}
-.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
-.detail{background:#090f1b;border:1px solid #26334a;padding:10px;border-radius:9px;min-width:0}
-.detail small{display:block;color:var(--muted);font-size:10px;margin-bottom:5px}
-.detail span{font-size:12px;overflow-wrap:anywhere}
-.logs{max-height:320px;overflow:auto}
-.log{padding:11px 0;border-bottom:1px solid #26334a;font-size:12px}
-.log:last-child{border:0}
-.loghead{display:flex;justify-content:space-between;gap:10px}
-.log p{color:var(--muted);margin:6px 0 0;overflow-wrap:anywhere}
-.ok{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--yellow)}
-.empty{color:var(--muted);font-size:12px;text-align:center;padding:25px 5px}
-footer{text-align:center;color:#64738d;font-size:11px;padding:18px}
+.secondary{
+  background:var(--surface2);color:white;border:1px solid var(--border);
+  border-radius:12px;padding:12px 16px;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.discord{
+  background:#202127;border:1px solid #343640;
+  border-radius:13px;padding:15px;margin-top:10px;
+}
+.discord-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#8b7cff,#63a8ff);
+  display:grid;place-items:center;font-weight:bold
+}
+.discord-name{font-size:13px;font-weight:700}
+.discord-time{font-size:10px;color:var(--muted);font-weight:400}
+.embed{
+  border-left:4px solid #9277f5;background:#191a20;
+  padding:13px;border-radius:4px 10px 10px 4px;
+}
+.embed h3{font-size:15px;margin:0 0 9px}
+.embed p{font-size:13px;line-height:1.5;color:#d5d6dc;margin:0;white-space:pre-wrap}
+.embed img{display:block;max-width:100%;max-height:220px;border-radius:8px;margin-top:12px}
+.footer{font-size:11px;color:#a8aab3;margin-top:12px}
+.notice{
+  color:var(--muted);font-size:11px;line-height:1.5;margin-top:10px;
+}
+.result{
+  display:none;margin-top:16px;padding:13px;
+  border-radius:12px;background:#12151c;border:1px solid var(--border);
+  font-size:12px;line-height:1.6;overflow-wrap:anywhere;
+}
+.result.show{display:block}
+.result.success{border-color:#286c50}
+.result.error{border-color:#783746}
+.result pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#c5c8d2}
+.about{margin-top:20px}
+.about-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px
+}
+.about-item{
+  padding:16px;border-radius:13px;background:var(--surface2)
+}
+.about-item b{font-size:14px}
+.about-item p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:0}
+.page{display:none}
+.page.active{display:block}
+footer{
+  text-align:center;color:#777e8d;font-size:11px;
+  padding:35px 10px 15px
+}
 @media(max-width:760px){
- .app{padding:14px}.layout{grid-template-columns:1fr}
- .stats{gap:8px}.stat{padding:11px}.stat strong{font-size:20px}
- header{align-items:flex-start}.two{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr}
+  .app{padding:14px}
+  .card{padding:16px}
+  .about-grid{grid-template-columns:1fr}
+  nav{gap:0}
+  .navbtn{padding:9px}
 }
 </style>
 </head>
+
 <body>
 <div class="app">
 <header>
- <div class="brand">
-  <div class="logo">⚡</div>
-  <div><h1>ZORVAXO STUDIO</h1><p>DISCORD EMBED CONTROL CENTER</p></div>
- </div>
- <div class="status">● SYSTEM READY</div>
+  <div class="brand">
+    <div class="logo">Z</div>
+    <div>
+      <strong>ZORVAXO</strong>
+      <div style="font-size:10px;color:var(--muted)">CREATOR STUDIO</div>
+    </div>
+  </div>
+  <nav>
+    <button class="navbtn active" data-page="studio">Studio</button>
+    <button class="navbtn" data-page="about">About</button>
+  </nav>
 </header>
 
-<section class="hero">
- <h2>Embed <span>Command Center</span></h2>
- <p>Build, preview and send Discord embeds. Monitor every request with detailed error diagnostics.</p>
+<main>
+<section class="page active" id="studio">
+  <div class="hero">
+    <h1>Create something <span class="gradient">amazing.</span></h1>
+    <p>Create and send beautiful Discord embeds with a simple editor.</p>
+  </div>
+
+  <div class="layout">
+    <section class="card">
+      <h2>✦ Embed editor</h2>
+
+      <div class="field">
+        <label>Discord Bot Token</label>
+        <input id="token" type="password" placeholder="Paste your bot token">
+      </div>
+
+      <div class="field">
+        <label>Server / Guild ID</label>
+        <input id="guild" placeholder="Enter server ID">
+      </div>
+
+      <div class="field">
+        <label>Channel ID</label>
+        <input id="channel" placeholder="Enter channel ID">
+      </div>
+
+      <div class="field">
+        <label>Embed title</label>
+        <input id="title" maxlength="256" placeholder="Your announcement title">
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea id="description" maxlength="4000" placeholder="Write your message here..."></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Embed color</label>
+          <input id="color" type="color" value="#9277f5">
+        </div>
+        <div class="field">
+          <label>Footer</label>
+          <input id="footer" maxlength="2048" placeholder="Your footer">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Image URL (optional)</label>
+        <input id="imageUrl" type="url" placeholder="https://example.com/image.png">
+      </div>
+
+      <div class="field">
+        <label>Or choose an image</label>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif">
+          <div class="drop-content" id="dropContent">
+            <div class="drop-icon">＋</div>
+            <p>Drop image here or click to browse</p>
+            <small>PNG, JPG, WEBP or GIF</small>
+          </div>
+        </label>
+        <div class="notice">Local image selection is currently for preview. To send the selected file to Discord, the API must support file attachments.</div>
+      </div>
+
+      <div class="field">
+        <label>Thumbnail URL (optional)</label>
+        <input id="thumbnail" type="url" placeholder="https://example.com/thumbnail.png">
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="send">Send embed ↗</button>
+        <button class="secondary" id="reset">Reset</button>
+      </div>
+
+      <div class="result" id="result">
+        <b id="resultTitle"></b>
+        <div id="resultText"></div>
+        <pre id="resultDetails"></pre>
+        <button class="secondary" id="copyReport">Copy report</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>◉ Live preview</h2>
+      <div class="discord">
+        <div class="discord-top">
+          <div class="avatar">Z</div>
+          <div>
+            <div class="discord-name">Your Bot <span class="discord-time">Today</span></div>
+            <div style="font-size:11px;color:var(--muted)">BOT</div>
+          </div>
+        </div>
+        <div class="embed" id="embedPreview">
+          <h3 id="previewTitle">Your embed title</h3>
+          <p id="previewDescription">Your embed description will appear here...</p>
+          <img id="previewImage" style="display:none">
+          <div class="footer" id="previewFooter"></div>
+        </div>
+      </div>
+      <div class="notice">This is a visual preview. Discord may display some elements differently.</div>
+    </section>
+  </div>
 </section>
 
-<div class="stats">
- <div class="stat"><small>TOTAL REQUESTS</small><strong id="total">0</strong></div>
- <div class="stat"><small>SUCCESSFUL</small><strong class="ok" id="success">0</strong></div>
- <div class="stat"><small>FAILED</small><strong class="bad" id="failed">0</strong></div>
-</div>
+<section class="page" id="about">
+  <div class="hero">
+    <h1>About <span class="gradient">Zorvaxo.</span></h1>
+    <p>A simple workspace for Discord creators and server owners.</p>
+  </div>
 
-<div class="layout">
- <main>
-  <section class="panel">
-   <h3>01 / CONNECTION SETTINGS</h3>
-   <div class="field">
-    <label>API ENDPOINT</label>
-    <input id="endpoint" value="https://zorvaxo.api.vercel.app/api/channels">
-   </div>
-   <div class="field">
-    <label>DISCORD BOT TOKEN</label>
-    <input id="token" type="password" placeholder="Paste your own bot token">
-   </div>
-   <div class="two">
-    <div class="field"><label>GUILD / SERVER ID</label><input id="guild" placeholder="Server ID"></div>
-    <div class="field"><label>CHANNEL ID</label><input id="channel" placeholder="Channel ID"></div>
-   </div>
-  </section>
+  <div class="card">
+    <h2>What is Zorvaxo Studio?</h2>
+    <p style="color:var(--muted);line-height:1.8;font-size:14px">
+      Zorvaxo Studio is a Discord embed creation dashboard. It helps server owners
+      create announcements and send formatted embeds through their own Discord bot.
+    </p>
 
-  <section class="panel">
-   <h3>02 / EMBED BUILDER</h3>
-   <div class="field"><label>EMBED TITLE</label><input id="title" placeholder="Announcement title"></div>
-   <div class="field"><label>DESCRIPTION</label><textarea id="description" placeholder="Write your announcement..."></textarea></div>
-   <div class="two">
-    <div class="field"><label>EMBED COLOR</label><input id="color" type="color" value="#648cff"></div>
-    <div class="field"><label>FOOTER</label><input id="footer" placeholder="OverMC • Official"></div>
-   </div>
-   <div class="field"><label>THUMBNAIL URL</label><input id="thumbnail" placeholder="https://example.com/icon.png"></div>
-   <div class="field"><label>IMAGE URL</label><input id="image" placeholder="https://example.com/banner.png"></div>
-   <div class="actions">
-    <button class="btn" id="send">⚡ SEND EMBED</button>
-    <button class="btn secondary" id="clear">CLEAR</button>
-   </div>
-  </section>
+    <div class="about-grid">
+      <div class="about-item">
+        <b>✦ Easy Embed Builder</b>
+        <p>Create announcements with titles, descriptions, colors and images.</p>
+      </div>
+      <div class="about-item">
+        <b>🖼️ Image Picker</b>
+        <p>Choose images from your device and preview them while editing.</p>
+      </div>
+      <div class="about-item">
+        <b>⚡ Simple Dashboard</b>
+        <p>A clean, mobile-friendly interface for Discord server management.</p>
+      </div>
+    </div>
+  </div>
 
-  <section class="panel">
-   <h3>03 / LIVE PREVIEW</h3>
-   <div class="preview" id="preview">
-    <small>EMBED PREVIEW</small>
-    <h4 id="pvtitle">Your announcement title</h4>
-    <p id="pvdesc">Your embed description will appear here.</p>
-    <div id="pvfooter"></div>
-    <img id="pvimage" hidden alt="Embed image preview">
-   </div>
-  </section>
- </main>
+  <div class="card about">
+    <h2>24/7 Discord Bot Hosting</h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7">
+      Keep your Discord bot online around the clock with a suitable hosting
+      service. Zorvaxo Studio itself is an embed dashboard; it does not run
+      or host your bot process.
+    </p>
+    <div class="about-item">
+      <b>Always-online hosting information</b>
+      <p>Choose a reliable hosting provider to run your bot continuously.
+      Hosting availability, uptime and pricing depend on that provider.</p>
+    </div>
+  </div>
+</section>
+</main>
 
- <aside>
-  <section class="panel">
-   <div class="diag-top">
-    <h3>04 / ERROR DIAGNOSTICS</h3>
-    <span class="pill" id="diagStatus">WAITING</span>
-   </div>
-   <div id="diagnostic">
-    <div class="empty">No errors detected yet.<br>Send an embed to start diagnostics.</div>
-   </div>
-   <div class="actions" style="margin-top:13px">
-    <button class="btn secondary" id="copyReport">COPY REPORT</button>
-    <button class="btn danger" id="clearLogs">CLEAR LOGS</button>
-   </div>
-  </section>
-
-  <section class="panel">
-   <h3>05 / REQUEST HISTORY</h3>
-   <div class="logs" id="logs"><div class="empty">No requests yet.</div></div>
-  </section>
- </aside>
-</div>
-
-<footer>ZORVAXO STUDIO • ADVANCED REQUEST MONITOR</footer>
+<footer>
+  ZORVAXO STUDIO · Made for Discord creators
+</footer>
 </div>
 
 <script>
+/* API address is kept in the app code, not displayed in the interface. */
+const API_URL = "https://zorvaxo-api.vercel.app/api/channels";
+
 const $ = id => document.getElementById(id);
-let historyLogs = [];
-let lastReport = null;
-let counts = {total:0,success:0,failed:0};
+let selectedImage = "";
+let lastReport = "";
 
-function updateStats(){
- $('total').textContent=counts.total;
- $('success').textContent=counts.success;
- $('failed').textContent=counts.failed;
-}
-
-function safeText(v){return String(v||'').trim()}
+const fields = ["title","description","color","footer","imageUrl","thumbnail"];
 
 function updatePreview(){
- $('pvtitle').textContent=safeText($('title').value)||'Your announcement title';
- $('pvdesc').textContent=safeText($('description').value)||'Your embed description will appear here.';
- $('pvfooter').textContent=safeText($('footer').value);
- const url=safeText($('image').value);
- $('pvimage').hidden=!url;
- if(url)$('pvimage').src=url;
+  $("previewTitle").textContent = $("title").value || "Your embed title";
+  $("previewDescription").textContent =
+    $("description").value || "Your embed description will appear here...";
+  $("previewFooter").textContent = $("footer").value;
+  $("embedPreview").style.borderLeftColor = $("color").value;
+
+  const url = $("imageUrl").value.trim() || selectedImage;
+  const img = $("previewImage");
+
+  if(url){
+    img.src = url;
+    img.style.display = "block";
+    img.onerror = () => {
+      img.style.display = "none";
+    };
+  }else{
+    img.removeAttribute("src");
+    img.style.display = "none";
+  }
 }
-['title','description','footer','image'].forEach(id=>{
- $(id).addEventListener('input',updatePreview);
+
+fields.forEach(id => $(id).addEventListener("input",updatePreview));
+
+function showResult(type,title,message,details,report){
+  const box = $("result");
+  box.className = "result show " + type;
+  $("resultTitle").textContent = title;
+  $("resultText").textContent = message;
+  $("resultDetails").textContent = details || "";
+  lastReport = report || "";
+}
+
+function filePreview(file){
+  if(!file)return;
+  if(!file.type.startsWith("image/")){
+    showResult("error","Invalid file","Please choose an image file.","","");
+    return;
+  }
+  if(file.size > 8 * 1024 * 1024){
+    showResult("error","Image too large","Choose an image under 8 MB.","","");
+    return;
+  }
+  if(selectedImage.startsWith("blob:")) URL.revokeObjectURL(selectedImage);
+  selectedImage = URL.createObjectURL(file);
+
+  $("dropContent").innerHTML =
+    '<img class="preview-image" src="'+selectedImage+'" alt="Selected image"><p>Image selected</p><small>'+file.name.replace(/[<>&"]/g,"")+'</small>';
+
+  updatePreview();
+}
+
+$("file").addEventListener("change",e=>filePreview(e.target.files[0]));
+
+const drop = $("drop");
+["dragenter","dragover"].forEach(event=>{
+  drop.addEventListener(event,e=>{
+    e.preventDefault();
+    drop.classList.add("drag");
+  });
 });
-
-function classify(status,message){
- const m=String(message||'').toLowerCase();
- if(status===401)return ['Discord authentication failed','The bot token may be invalid, expired or incorrect.','Check the bot token in your trusted backend setup.'];
- if(status===403)return ['Permission denied','The bot may not have permission to view the channel or send messages.','Check View Channel, Send Messages and Embed Links permissions.'];
- if(status===404)return ['Endpoint or resource not found','The API route, server or channel may not exist.','Check the endpoint URL, deployment and Discord IDs.'];
- if(status===429)return ['Rate limited','Discord or your API is receiving requests too quickly.','Wait and retry after the rate-limit period.'];
- if(status>=500)return ['Server error','The API server encountered an internal error.','Inspect Vercel function logs and backend response.'];
- if(status>=400)return ['Request rejected','The API rejected the submitted information.','Read the server response for the exact validation issue.'];
- if(m.includes('failed to fetch')||m.includes('networkerror')){
-  return ['Network / CORS / connection failure',
-   'The browser could not read a response from the endpoint. This can be caused by CORS, DNS, SSL, a missing route or a network interruption.',
-   'Verify the endpoint, deployment and OPTIONS preflight response. Browser errors alone cannot prove which one caused it.'];
- }
- if(m.includes('json'))return ['Invalid JSON response','The server response could not be parsed as JSON.','Check whether the API returned HTML, an empty response or malformed JSON.'];
- return ['Request failed','An unexpected error occurred.','Inspect the raw response and server logs.'];
-}
-
-function addLog(type,title,detail,time){
- historyLogs.unshift({type,title,detail,time});
- historyLogs=historyLogs.slice(0,30);
- $('logs').innerHTML=historyLogs.map(x=>`
-  <div class="log">
-   <div class="loghead"><b class="${x.type==='success'?'ok':'bad'}">${escapeHtml(x.title)}</b><span>${escapeHtml(x.time)}</span></div>
-   <p>${escapeHtml(x.detail)}</p>
-  </div>`).join('');
-}
-
-function escapeHtml(s){
- return String(s).replace(/[&<>"']/g,c=>({
- '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
- }[c]));
-}
-
-function showDiagnostic(report,good=false){
- lastReport=report;
- $('diagStatus').textContent=good?'SUCCESS':'ERROR DETECTED';
- $('diagStatus').style.color=good?'#35d49a':'#ff647c';
- const info=good?['Message sent successfully','The API returned a successful HTTP response.','Check your Discord channel to confirm the embed is visible.']:classify(report.status,report.error);
- $('diagnostic').innerHTML=`
- <div class="errorbox ${good?'good':''}">
-  <strong>${escapeHtml(info[0])}</strong>
-  <p>${escapeHtml(info[1])}</p>
-  <p><b>Suggested action:</b> ${escapeHtml(info[2])}</p>
- </div>
- <div class="detailgrid">
-  <div class="detail"><small>TIME</small><span>${escapeHtml(report.time)}</span></div>
-  <div class="detail"><small>DURATION</small><span>${report.duration} ms</span></div>
-  <div class="detail"><small>HTTP STATUS</small><span>${report.status||'Unavailable'}</span></div>
-  <div class="detail"><small>ERROR SOURCE</small><span>${escapeHtml(report.source)}</span></div>
-  <div class="detail"><small>METHOD</small><span>POST</span></div>
-  <div class="detail"><small>ENDPOINT</small><span>${escapeHtml(report.endpoint)}</span></div>
- </div>
- <div class="detail" style="margin-top:10px">
-  <small>RAW SERVER / BROWSER RESPONSE</small>
-  <span>${escapeHtml(report.response||report.error||'No error response')}</span>
- </div>
- <div class="detail" style="margin-top:10px">
-  <small>USER AGENT</small><span>${escapeHtml(report.agent)}</span>
- </div>`;
-}
+["dragleave","drop"].forEach(event=>{
+  drop.addEventListener(event,e=>{
+    e.preventDefault();
+    drop.classList.remove("drag");
+  });
+});
+drop.addEventListener("drop",e=>{
+  const file=e.dataTransfer.files[0];
+  filePreview(file);
+});
 
 async function sendEmbed(){
- const endpoint=safeText($('endpoint').value);
- const token=safeText($('token').value);
- const guild=safeText($('guild').value);
- const channel=safeText($('channel').value);
- const title=safeText($('title').value);
- const description=safeText($('description').value);
- if(!endpoint||!token||!guild||!channel||(!title&&!description)){
-  showDiagnostic({
-   time:new Date().toLocaleString(),duration:0,status:'Local validation',
-   source:'HTML FORM',endpoint:endpoint||'Not provided',
-   error:'Required fields are missing.',
-   response:'Enter API endpoint, bot token, guild ID, channel ID and an embed title or description.',
-   agent:navigator.userAgent
-  });
-  return;
- }
+  const token=$("token").value.trim();
+  const guildId=$("guild").value.trim();
+  const channelId=$("channel").value.trim();
 
- const payload={
-  botToken:token,guildId:guild,channelId:channel,
-  title,description,color:$('color').value,
-  footer:safeText($('footer').value),
-  image:safeText($('image').value),
-  thumbnail:safeText($('thumbnail').value)
- };
-
- const start=performance.now();
- const time=new Date().toLocaleString();
- $('send').disabled=true;
- $('send').textContent='SENDING...';
- counts.total++;updateStats();
-
- let status=0,responseText='',source='API / NETWORK';
- try{
-  const response=await fetch(endpoint,{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify(payload)
-  });
-  status=response.status;
-  responseText=await response.text();
-  let data;
-  try{data=JSON.parse(responseText)}catch{data=null}
-
-  const duration=Math.round(performance.now()-start);
-  const report={
-   time,duration,status,source,endpoint,
-   response:responseText.slice(0,6000),
-   error:response.ok?'':(data?.error||data?.message||response.statusText||'HTTP request failed'),
-   agent:navigator.userAgent
-  };
-
-  if(!response.ok){
-   counts.failed++;
-   showDiagnostic(report);
-   addLog('failed','HTTP '+status,report.error||responseText,time);
-  }else{
-   counts.success++;
-   showDiagnostic(report,true);
-   addLog('success','Request successful',data?.message||'API returned HTTP '+status,time);
+  if(!token || !guildId || !channelId){
+    showResult("error","Missing information",
+      "Bot token, server ID and channel ID are required.","","");
+    return;
   }
- }catch(error){
-  const duration=Math.round(performance.now()-start);
-  const report={
-   time,duration,status:0,source:'BROWSER / NETWORK',
-   endpoint,error:error.message||String(error),
-   response:'No readable HTTP response. The browser blocked or could not complete the request. Check CORS, OPTIONS preflight, DNS, SSL, endpoint URL and browser network logs.',
-   agent:navigator.userAgent
+
+  if(!/^\d{17,20}$/.test(guildId) || !/^\d{17,20}$/.test(channelId)){
+    showResult("error","Invalid Discord ID",
+      "Check your server ID and channel ID.","","");
+    return;
+  }
+
+  const image=$("imageUrl").value.trim();
+  const thumbnail=$("thumbnail").value.trim();
+
+  if(selectedImage && !image){
+    showResult("error","Local image not uploaded",
+      "Your selected image is preview-only with the current API. Enter an HTTPS image URL to send an image, or update the API to support file attachments.",
+      "The existing API accepts image URLs, not local files.","");
+    return;
+  }
+
+  for(const url of [image,thumbnail]){
+    if(url && !/^https:\/\/\S+$/i.test(url)){
+      showResult("error","Invalid image URL",
+        "Image and thumbnail URLs must use HTTPS.","","");
+      return;
+    }
+  }
+
+  const payload={
+    botToken:token,
+    guildId,
+    channelId,
+    title:$("title").value.trim(),
+    description:$("description").value.trim(),
+    color:$("color").value,
+    footer:$("footer").value.trim(),
+    image,
+    thumbnail
   };
-  counts.failed++;
-  showDiagnostic(report);
-  addLog('failed','FETCH ERROR',report.error,time);
- }finally{
-  updateStats();
-  $('send').disabled=false;
-  $('send').textContent='⚡ SEND EMBED';
- }
+
+  const button=$("send");
+  button.disabled=true;
+  button.textContent="Sending...";
+  const started=Date.now();
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),20000);
+
+  try{
+    const response=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload),
+      signal:controller.signal
+    });
+
+    const duration=Date.now()-started;
+    const raw=await response.text();
+    let data;
+    try{data=JSON.parse(raw)}catch{data={message:raw}}
+
+    const report={
+      time:new Date().toISOString(),
+      endpoint:"/api/channels",
+      method:"POST",
+      status:response.status,
+      duration:duration+"ms",
+      result:response.ok?"SUCCESS":"FAILED",
+      response:data
+    };
+
+    const details=JSON.stringify(report,null,2);
+
+    if(!response.ok){
+      showResult("error","Discord request failed",
+        data.error || data.message || "The API returned an error.",
+        details,details);
+    }else{
+      showResult("success","Embed sent successfully",
+        "Your message was sent to the Discord channel.",
+        details,details);
+    }
+  }catch(error){
+    const duration=Date.now()-started;
+    let reason="Network request failed. Check your internet connection and API CORS settings.";
+
+    if(error.name==="AbortError"){
+      reason="Request timed out after 20 seconds.";
+    }
+
+    const report={
+      time:new Date().toISOString(),
+      endpoint:"/api/channels",
+      method:"POST",
+      status:"No HTTP response",
+      duration:duration+"ms",
+      error:error.message,
+      reason,
+      diagnosis:"Check browser Network tab, CORS preflight and Vercel function logs."
+    };
+
+    const details=JSON.stringify(report,null,2);
+    showResult("error","Connection failed",reason,details,details);
+  }finally{
+    clearTimeout(timeout);
+    button.disabled=false;
+    button.textContent="Send embed ↗";
+  }
 }
 
-$('send').addEventListener('click',sendEmbed);
-$('clear').addEventListener('click',()=>{
- ['title','description','footer','thumbnail','image'].forEach(id=>$(id).value='');
- updatePreview();
+$("send").addEventListener("click",sendEmbed);
+
+$("copyReport").addEventListener("click",async()=>{
+  if(!lastReport)return;
+  try{
+    await navigator.clipboard.writeText(lastReport);
+    $("copyReport").textContent="Copied!";
+    setTimeout(()=>$("copyReport").textContent="Copy report",1500);
+  }catch{
+    showResult("error","Copy failed","Your browser blocked clipboard access.","","");
+  }
 });
 
-$('copyReport').addEventListener('click',async()=>{
- if(!lastReport){alert('No diagnostic report available.');return;}
- const r=lastReport;
- const report=[
-  'ZORVAXO ERROR DIAGNOSTIC REPORT',
-  'Time: '+r.time,
-  'Duration: '+r.duration+' ms',
-  'HTTP Status: '+r.status,
-  'Source: '+r.source,
-  'Endpoint: '+r.endpoint,
-  'Error: '+(r.error||'None'),
-  'Response: '+(r.response||'None'),
-  'User Agent: '+r.agent
- ].join('\n');
- try{
-  await navigator.clipboard.writeText(report);
-  $('copyReport').textContent='COPIED ✓';
-  setTimeout(()=>$('copyReport').textContent='COPY REPORT',1500);
- }catch{
-  alert('Clipboard unavailable. Please copy the report manually.');
- }
+$("reset").addEventListener("click",()=>{
+  fields.forEach(id=>{
+    if(id==="color")$(id).value="#9277f5";
+    else $(id).value="";
+  });
+  selectedImage="";
+  $("file").value="";
+  $("dropContent").innerHTML=
+    '<div class="drop-icon">＋</div><p>Drop image here or click to browse</p><small>PNG, JPG, WEBP or GIF</small>';
+  $("result").className="result";
+  updatePreview();
 });
 
-$('clearLogs').addEventListener('click',()=>{
- historyLogs=[];
- counts={total:0,success:0,failed:0};
- lastReport=null;
- updateStats();
- $('logs').innerHTML='<div class="empty">No requests yet.</div>';
- $('diagnostic').innerHTML='<div class="empty">Logs cleared.</div>';
- $('diagStatus').textContent='WAITING';
+document.querySelectorAll(".navbtn").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    button.classList.add("active");
+    $(button.dataset.page).classList.add("active");
+  });
 });
 
 updatePreview();
